@@ -3,7 +3,10 @@ import sys
 sys.path.insert(0, 'src')
 import transform, numpy as np, vgg, pdb, os
 import scipy.misc
-import tensorflow as tf
+#import tensorflow as tf
+import tensorflow.compat.v1 as tf
+tf.disable_v2_behavior()
+
 from utils import save_img, get_img, exists, list_files
 from argparse import ArgumentParser
 from collections import defaultdict
@@ -85,7 +88,7 @@ def ffwd(data_in, paths_out, checkpoint_dir, device_t='/gpu:0', batch_size=4):
     soft_config = tf.ConfigProto(allow_soft_placement=True)
     soft_config.gpu_options.allow_growth = True
     with g.as_default(), g.device(device_t), \
-            tf.Session(config=soft_config) as sess:
+            tf.compat.v1.Session(config=soft_config) as sess:
         batch_shape = (batch_size,) + img_shape
         img_placeholder = tf.placeholder(tf.float32, shape=batch_shape,
                                          name='img_placeholder')
